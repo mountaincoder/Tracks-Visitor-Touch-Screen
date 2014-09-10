@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Zoo Visitor Touchscreen</title>
+<link rel='apple-touch-icon' href='images/tracks-icon-72.png'>
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="favicon.png">
+<link rel='stylesheet' type='text/css' href='css/main.css'>
+<script type="text/javascript" src="javascript/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="javascript/jquery-cookie-1.4.1-min.js"></script>
+<script type="text/javascript" src="javascript/jquery.hammer-full.min.js"></script>    
+<script type="text/javascript" src="javascript/jquery.json-2.4.min.js"></script>
+<script type="text/javascript" src="javascript/jquery.timer.js"></script>
+<script type="text/javascript" src="javascript/jstorage.min.js"></script>
+<script type="text/javascript" src="javascript/jquery-resize.js"></script>
+<script type="text/javascript" src="javascript/carousel.js"></script>
+<script type="text/javascript" src="javascript/app.js"></script>
+<script type="text/javascript" src="javascript/configuration.js"></script>
+<script type="text/javascript">
+/* this is the equivalent of Body.OnLoad(), but is related to
+   the DOM being loaded, but not waiting for all page resources
+*/
+$(document).ready(function() {
+    reset();
+});
+</script>
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+</head>
+<body>
+    <div id="body">
+        <div id="appui_head" class="appui">
+            <div class="logo"></div>
+            <div class="enclosure_name"></div>
+            <div class="taxa">
+                <div class="common"></div>
+                <div class="gss"></div>
+            </div>
+        </div>
+        <div id="appui" class="appui">
+            <label for="BeaconID">Sinage ID</label>
+            <input type="text" id="BeaconID"><br />
+            <button id="StartButton" disabled="true">Start</button>
+        </div>
+        <div id="appui_foot" class="appui"></div>
+    </div>                                 
+</body>
+</html>

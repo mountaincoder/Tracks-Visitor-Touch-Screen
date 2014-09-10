@@ -1,0 +1,205 @@
+html{
+    overflow: auto;
+}
+html,
+body {
+    margin:0;
+    padding:0;
+    font: normal 14px Cochin, Cochin LT, Verdona, Arial, Helvetica, sans-serif;
+    color: #000000;                
+    height: 100%;
+}   
+#appui_head{
+    display: none;
+    
+    background: #000;
+    background: -moz-linear-gradient(top, #000 0%, #111 80%, #333 95%, #444 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, #000), color-stop(80%, #111), color-stop(95%, #333), color-stop(100%, #444));
+    background: -webkit-linear-gradient(top, #000 0%, #111 80%, #333 95%, #444 100%);
+    background: -o-linear-gradient(top, #000 0%, #111 80%, #333 95%, #444 100%);
+    background: -ms-linear-gradient(top, #000 0%, #111 80%, #333 95%, #444 100%);
+    background: linear-gradient(to bottom, #000 0%, #111 80%, #333 95%, #444 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#444444', GradientType=0 );
+    
+    clear: both;
+    overflow: hidden;
+    position: relative;
+    
+    color: #FFF;
+}
+#appui_head .logo{
+    float: left;
+    padding: 10px 15px;
+    
+    height: 83px;
+    width: 81px;          
+    background-image: url('img/logo.png?v=2');
+    background-position: center center;
+    background-repeat: no-repeat;    
+}
+#appui_head .enclosure_name{
+    float: left;
+    font-size: 45px; 
+    line-height: 45px; 
+    padding: 40px 15px 15px 15px;  
+}
+#appui_head .taxa{
+    float: right;
+    padding: 15px 45px 15px 45px;    
+}
+#appui_head .taxa .common{ 
+    font-size: 30px;
+    line-height: 30px; 
+}
+#appui_head .taxa .gss{  
+    font-size: 20px;
+    line-height: 20px;
+}    
+   
+#appui_foot{
+    display: none;
+  
+    background: #000;
+    background: -moz-linear-gradient(bottom, #000 0%, #111 50%, #333 90%, #555 100%);
+    background: -webkit-gradient(left bottom, left top, color-stop(0%, #000), color-stop(50%, #111), color-stop(90%, #333), color-stop(100%, #555));
+    background: -webkit-linear-gradient(bottom, #000 0%, #111 50%, #333 90%, #555 100%);
+    background: -o-linear-gradient(bottom, #000 0%, #111 50%, #333 90%, #555 100%);
+    background: -ms-linear-gradient(bottom, #000 0%, #111 50%, #333 90%, #555 100%);
+    background: linear-gradient(to top, #000 0%, #111 50%, #333 90%, #555 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#555555', endColorstr='#000000', GradientType=0 );
+    
+    clear: both;
+    overflow: visible;     
+    
+    color: #FFF;
+    
+    height: 200px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+#appui_foot #more_info_div{ 
+    position: absolute;
+    z-index: 200;
+    top: -130px;
+    right: 20px;
+    width: 71px;   
+    text-align: center;
+  
+    color: #FFF; 
+    text-shadow: 1px 1px 0 #000,
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      0px 1px 0 #000,
+      1px 0px 0 #000,
+      0px -1px 0 #000,
+      -1px 0px 0 #000,
+      
+      3px 3px 6px #000,      
+      4px 4px 6px #000,      
+      5px 5px 6px #000;
+}
+.fingerprint_filled{   
+    height: 87px;
+    width: 71px;          
+    background-image: url('img/fingerprint_filled.png');
+    background-position: center center;
+    background-repeat: no-repeat; 
+}
+
+#appui{
+    overflow: hidden;
+    position: relative;
+}
+
+#CarouselDivContainer{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#CarouselDiv{
+    position: absolute;
+    bottom: 15px;
+    height: 170px;
+                       
+    text-align: center;
+    overflow: hidden;
+    
+    /*width: 2000px;
+    left: -21px;  */
+}
+#CarouselDiv .taxaDiv{
+    float: left;
+}
+#CarouselDiv .taxaDiv img{
+    height: 170px;
+    padding-right: 10px;
+}
+
+
+#overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+                       
+    color: #FFF; 
+    text-shadow: 1px 1px 0 #000,
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      0px 1px 0 #000,
+      1px 0px 0 #000,
+      0px -1px 0 #000,
+      -1px 0px 0 #000,
+      
+      3px 3px 6px #000,      
+      4px 4px 6px #000,      
+      5px 5px 6px #000;
+}        
+
+#overlay .enclosure_name{
+    text-align: right;
+    font-size: 45px; 
+    line-height: 45px; 
+    padding:  25px 45px 15px 15px;  
+}
+#overlay .taxa{
+    float: left;
+    padding: 25px 15px 15px 25px;    
+}
+#overlay .taxa .common{ 
+    font-size: 30px;
+    line-height: 30px; 
+}
+#overlay .taxa .gss{  
+    font-size: 27px;
+    line-height: 20px;
+}
+#overlay .back{  
+    position: absolute;
+    top: 110px;
+    left: 25px;
+    
+    width: 71px;   
+    text-align: center;
+}
+#overlay .notes{
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    padding: 15px;
+}
+#overlay .notes .habitat,
+#overlay .notes .species{
+    padding-bottom: 20px;
+    font-size: 30px;
+}
+   
+.hideDiv { 
+  display: none 
+}
