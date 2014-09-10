@@ -1,0 +1,1 @@
+XCOPY *.* \\whitepine\common\visitortouchscreen /s /y /u
