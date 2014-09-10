@@ -54,8 +54,8 @@ function drawTaxaDetailDisplay() {
     $("#overlay").data("TaxID", FTaxaObjectList[FCurrentTaxa].TaxID);
     $("#overlay").data(LOAD_TIME_MILLIS, currentTimeMillis());
 
-    getNotesForTaxa(FTaxaObjectList[FCurrentTaxa].TaxID, HABITAT_INFO_NOTE_TYPE, $('#' + APP_UI_CONTAINER_ELEMENT_ID + ' #overlay .notes .habitat'));
-    getNotesForTaxa(FTaxaObjectList[FCurrentTaxa].TaxID, SPECIES_INFO_NOTE_TYPE, $('#' + APP_UI_CONTAINER_ELEMENT_ID + ' #overlay .notes .species'));
+    populateTaxaNotes(FTaxaObjectList[FCurrentTaxa].Notes, HABITAT_INFO_NOTE_TYPE, $('#' + APP_UI_CONTAINER_ELEMENT_ID + ' #overlay .notes .habitat'));
+    populateTaxaNotes(FTaxaObjectList[FCurrentTaxa].Notes, SPECIES_INFO_NOTE_TYPE, $('#' + APP_UI_CONTAINER_ELEMENT_ID + ' #overlay .notes .species'));
 
     resize_appui();
 
@@ -122,7 +122,8 @@ function drawTaxaListingDisplay(TaxaObjectArray) {
                 class: "mediaDiv"
             }).appendTo("#" + DivID);
 
-            getMediaForTaxa(TaxID, VISITOR_ENGAGEMENT_TAXA_MEDIA_TAG);
+//            getMediaForTaxa(TaxID, VISITOR_ENGAGEMENT_TAXA_MEDIA_TAG);
+            populateTaxaImage(TaxID, TaxaObject.Media[0].MediaMasterID);
         });
     }
 
@@ -141,60 +142,13 @@ function getTaxaListForEnclosure(EnclosureID, isAsync) {
 
     URI = LOOKUP_ISAPI_URI + ENCLOSURE_TAXA_LIST_POSTFIX + SLASH + EnclosureID +
           QUESTION + DATATYPE_PAIR_NAME + EQUALS + TAXA_DATATYPE +
+          AMPER + IMAGE_TYPE_PAIR_NAME + EQUALS + VISITOR_ENGAGEMENT_TAXA_MEDIA_TAG +
+          AMPER + NOTES_CATEGORIES_PAIR_NAME + EQUALS + SPECIES_INFO_NOTE_TYPE + COMMA + HABITAT_INFO_NOTE_TYPE +
           AMPER + sessionIDQuerystringPair(false);
 
     getTracksAjax(URI, function(JSONResponseArray) {
         drawTaxaListingDisplay(JSONResponseArray);
     }, isAsync);
-}
-
-function getNotesForTaxa(TaxID, TagText, elm) {
-    var URI;
-
-    URI = LOOKUP_ISAPI_URI + TAXA_INFO_POSTFIX + SLASH + TaxID + QUESTION +
-          DATATYPE_PAIR_NAME + EQUALS + NOTES_DATAYPE + AMPER +
-          TEXT_PAIR_NAME + EQUALS + TagText + AMPER +
-          sessionIDQuerystringPair(false);
-
-    getTracksAjax(URI, function(JSONResponseArray) {
-       populateTaxaNotes(JSONResponseArray, TagText, elm);
-    });
-}
-
-function getQueryStringAssocArray(HrefString) {
-    var ReturnArray, HrefArray;
-
-    ReturnArray = {};
-    HrefArray = HrefString.split("?");
-
-    if(HrefArray.length > 1) {
-        $.each(HrefArray[1].split("&"), function(idx, Pair) {
-            var PairArray = Pair.split("=");
-
-            if(PairArray.length > 1)
-                ReturnArray[PairArray[0]] = decodeURIComponent(PairArray[1]);
-        });
-    }
-
-    return ReturnArray;
-}
-
-function getMediaForTaxa(TaxID, TagText) {
-    var URI, FoundMediaMasterID;
-
-    URI = LOOKUP_ISAPI_URI + TAXA_INFO_POSTFIX + SLASH + TaxID + QUESTION +
-          DATATYPE_PAIR_NAME + EQUALS + IMAGE_DATATYPE + AMPER +
-          TEXT_PAIR_NAME + EQUALS + TagText + AMPER +
-          sessionIDQuerystringPair(false);
-
-    getTracksAjax(URI, function(JSONResponseArray) {
-        if(JSONResponseArray.data == EMPTY_RESULT_SET_INDICATOR)
-            FoundMediaMasterID = -1;
-        else
-            FoundMediaMasterID = JSONResponseArray.data[0].MediaMasterID;
-
-        populateTaxaImage(TaxID, FoundMediaMasterID);
-    });
 }
 
 function getEnclosureIDFromBeacon(BeaconID) {
@@ -213,6 +167,24 @@ function getEnclosureIDFromBeacon(BeaconID) {
         if(BeaconID != SESSION_CHECK_CALL_TAG)
             drawEnclosureSummaryData(JSONResponseArray);
     }, false);
+}
+
+function getQueryStringAssocArray(HrefString) {
+    var ReturnArray, HrefArray;
+
+    ReturnArray = {};
+    HrefArray = HrefString.split("?");
+
+    if(HrefArray.length > 1) {
+        $.each(HrefArray[1].split("&"), function(idx, Pair) {
+            var PairArray = Pair.split("=");
+
+            if(PairArray.length > 1)
+                ReturnArray[PairArray[0]] = decodeURIComponent(PairArray[1]);
+        });
+    }
+
+    return ReturnArray;
 }
 
 function validateLogin(userName, password) {
@@ -243,8 +215,9 @@ function populateTaxaNotes(NotesObjArray, NoteType, elm) {
     if(NotesObjArray.data == EMPTY_RESULT_SET_INDICATOR){
         return;
     }
-    $.each(NotesObjArray.data, function(idx, NoteObj) {
-        elm.append($('<div>').html(NoteObj.Note));
+    $.each(NotesObjArray, function(idx, NoteObj) {
+        if(NoteObj.Category == NoteType)
+            elm.append($('<div>').html(NoteObj.Note));
     });
 }
 
@@ -578,6 +551,7 @@ var AMPER = "&";
 var EQUALS = "=";
 var QUESTION = "?";
 var SLASH = "/";
+var COMMA = ",";
 var SESSION_CHECK_CALL_TAG = "t-t-7-ß-4$^00b"
 var EMPTY_RESULT_SET_INDICATOR = "NO_RECORDS";
 var LOOKUP_ENCLOSURE_POSTFIX = '/visitor-enclosure-lookup';
@@ -594,6 +568,8 @@ var SIGNAGE_IDENTIFIER_TYPE = 'Signage%20ID';
 var DATATYPE_PAIR_NAME = 'datatype';
 var TEXT_PAIR_NAME = 'Text';
 var RETURN_TYPE_PAIR_NAME = 'ReturnType';
+var IMAGE_TYPE_PAIR_NAME = 'ImageTags';
+var NOTES_CATEGORIES_PAIR_NAME = 'NotesCategories';
 var SETTING_ID_PAIR_NAME = 'settingid';
 var TAXA_DATATYPE = 'taxa';
 var ANIMALS_DATATYPE = 'animals';
