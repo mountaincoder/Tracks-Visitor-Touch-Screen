@@ -559,7 +559,7 @@ var carousel_enclosure_animals = null;
 var FTaxaObjectList = Array(); //probably should be in jstorage instead
 var FCurrentTaxa = -1;         //probably should be in jstorage instead
 
-var LOOKUP_ISAPI_URI = '/tracks/tracksmobile.dll';
+var LOOKUP_ISAPI_URI = SERVER_HREF + '/tracks/tracksmobile.dll';
 var APP_UI_CONTAINER_ELEMENT_ID = 'appui';
 var APP_UI_HEAD_CONTAINER_ELEMENT_ID = 'appui_head';
 var APP_UI_FOOT_CONTAINER_ELEMENT_ID = 'appui_foot';
