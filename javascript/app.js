@@ -248,30 +248,37 @@ function checkLoginCookies() {
 }
 
 function getTracksAjax(URI, callback, isAsync) {
-    var request;
+    var request, useAsync;
 
     if(isAsync == undefined)
-        isAsync = true;
+        useAsync = true;
+    else
+        useAsync = isAsync;
 
     request = $.ajax({
         type: REQUEST_TYPE_GET,
-        async: isAsync,
+        async: useAsync,
         url: URI,
+        timeout: 20000,
         dataType: DATA_TYPE_JSON
     });
 
     request.success(callback);
 
-    request.error(function(XMLHttpRequest) {
+    request.error(function(XMLHttpRequest, TextStatus, ErrorThrown) {
         var JSONResponseArray, ErrorText;
         JSONResponseArray = $.parseJSON(XMLHttpRequest.responseText);
 
         if(JSONResponseArray != null) {
             ErrorText = JSONResponseArray.error.response_code;
+            if(TextStatus === "timeout") {
+                if(URI.indexOf(SPECIES_INFO_NOTE_TYPE + COMMA + HABITAT_INFO_NOTE_TYPE) > 0)
+                    getTaxaListForEnclosure($(document).data(ENCLOSURE_ID), isAsync);
+            }
     /* if execution goes to this block, and the call was made
        with the check call tag string, the check call ran into
        bad session and bombed. Reset session cookie and call reset() */
-            if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {
+            else if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {
                 $.cookie(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
                 $.jStorage.set(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
 
@@ -281,6 +288,34 @@ function getTracksAjax(URI, callback, isAsync) {
                 alert("An error occurred communicating with the server. Please reload the application.");
         }
     });
+//    request.error(function(XMLHttpRequest) {
+//        var JSONResponseArray, ErrorText;
+//        JSONResponseArray = $.parseJSON(XMLHttpRequest.responseText);
+//        /* Timeout is being enforced at 20 seconds. In this application,
+//           the only timeout vulnerability that is being addressed is
+//           that the NextTaxonomyMetaStack could be empty, so the call
+//           to build it from server data is made. Other vulnerabilities
+//           to timeout may be discovered later. */
+//        if(TextStatus === "timeout") {
+//            if(NextTaxonomyMetaStack == null || !NextTaxonomyMetaStack.hasMetaObjects())
+//                getTaxaListForEnclosure($("#" + APP_UI_CONTAINER_ELEMENT_ID).data("EnclosureID"));
+//        }
+//        if(JSONResponseArray != null) {
+//            ErrorText = JSONResponseArray.error.response_code;
+//            console.log(ErrorText);
+//    /* if execution goes to this block, and the call was made
+//       with the check call tag string, the check call ran into
+//       bad session and bombed. Reset session cookie and call reset() */
+//            if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {
+//                $.cookie(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
+//                $.jStorage.set(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
+//
+//                reset();
+//            }
+//            else
+//                alert("An error occurred communicating with the server. Please reload the application.");
+//        }
+//    });
 }
 
 function getSystemSetting(settingName) {
