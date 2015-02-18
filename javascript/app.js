@@ -198,7 +198,7 @@ function validateLogin(userName, password) {
 
     getTracksAjax(URI, function(JSONResponseArray) {
         setLoggedIn(JSONResponseArray);
-    }, false);
+    });
 }
 
 function populateTaxaImage(TaxonomyID, MediaMasterID) {
