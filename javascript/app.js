@@ -123,7 +123,9 @@ function drawTaxaListingDisplay(TaxaObjectArray) {
             }).appendTo("#" + DivID);
 
 //            getMediaForTaxa(TaxID, VISITOR_ENGAGEMENT_TAXA_MEDIA_TAG);
-            populateTaxaImage(TaxID, TaxaObject.Media[0].MediaMasterID);
+            if(TaxaObject.Media != undefined){
+                populateTaxaImage(TaxID, TaxaObject.Media[0].MediaMasterID);
+            }
         });
     }
 
@@ -223,8 +225,7 @@ function populateTaxaNotes(NotesObjArray, NoteType, elm) {
 
 function setLoggedIn(LoginResponse) {
     var SessionID = LoginResponse.data.TracksSessionID;
-
-    $.cookie(SESSION_COOKIE_NAME, SessionID);
+                                              
     $.jStorage.set(SESSION_COOKIE_NAME, SessionID);
 
     reset();
@@ -233,7 +234,7 @@ function setLoggedIn(LoginResponse) {
 function checkLoginCookies() {
     var SessionID;
 
-    SessionID = $.cookie(SESSION_COOKIE_NAME);
+    SessionID = $.jStorage.get(SESSION_COOKIE_NAME);
 
     if (SessionID == null || SessionID == NOT_LOGGED_IN) {
         $.jStorage.set(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
@@ -249,7 +250,10 @@ function checkLoginCookies() {
 
 function getTracksAjax(URI, callback, isAsync) {
     var request, useAsync;
-
+                
+    //if cross origin
+    URI = URI +((URI.indexOf(QUESTION) >= 0) ? AMPER : QUESTION) + "no_cache" + EQUALS + new Date().getTime();
+    
     if(isAsync == undefined)
         useAsync = true;
     else
@@ -278,8 +282,7 @@ function getTracksAjax(URI, callback, isAsync) {
     /* if execution goes to this block, and the call was made
        with the check call tag string, the check call ran into
        bad session and bombed. Reset session cookie and call reset() */
-            else if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {
-                $.cookie(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
+            else if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {   
                 $.jStorage.set(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
 
                 reset();
@@ -306,8 +309,7 @@ function getTracksAjax(URI, callback, isAsync) {
 //    /* if execution goes to this block, and the call was made
 //       with the check call tag string, the check call ran into
 //       bad session and bombed. Reset session cookie and call reset() */
-//            if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {
-//                $.cookie(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
+//            if(URI.indexOf(SESSION_CHECK_CALL_TAG) > 0) {       
 //                $.jStorage.set(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
 //
 //                reset();
@@ -394,8 +396,7 @@ function reset(count) {
         catch(e) { // if it bombs we know that the session cookie is out of sync with the server
             console.log(e);
             SessionFault = true;
-
-            $.cookie(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
+                                                            
             $.jStorage.set(SESSION_COOKIE_NAME, NOT_LOGGED_IN);
 
             reset(count - 1);
@@ -589,10 +590,10 @@ var SLASH = "/";
 var COMMA = ",";
 var SESSION_CHECK_CALL_TAG = "t-t-7-ß-4$^00b"
 var EMPTY_RESULT_SET_INDICATOR = "NO_RECORDS";
-var LOOKUP_ENCLOSURE_POSTFIX = '/visitor-enclosure-lookup';
-var ENCLOSURE_TAXA_LIST_POSTFIX = '/visitor-enclosure';
-var ANIMAL_INFO_POSTFIX = '/visitor-animal';
-var TAXA_INFO_POSTFIX = '/visitor-taxa';
+var LOOKUP_ENCLOSURE_POSTFIX = '/guest-enclosure-lookup';
+var ENCLOSURE_TAXA_LIST_POSTFIX = '/guest-enclosure';
+var ANIMAL_INFO_POSTFIX = '/guest-animal';
+var TAXA_INFO_POSTFIX = '/guest-taxa';
 var SYSTEMSETTING_POSTFIX = '/systemsetting';
 var VISITOR_ENGAGEMENT_TAXA_MEDIA_TAG = 'visitor engagement';
 var MEDIA_POSTFIX = '/media';
